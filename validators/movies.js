@@ -1,5 +1,6 @@
-const { query } = require('express-validator');
 const _ = require('lodash');
+
+const { query } = require('express-validator');
 
 async function checkIfSortValid(sort) {
   const { field, order } = sort;
@@ -27,5 +28,9 @@ module.exports = {
     query('offset').optional().isInt({ min: 0 }).withMessage('Beyond allowed range')
       .toInt(),
     query('sort').optional().customSanitizer(splitSortString).custom(checkIfSortValid),
+    query('genre').optional().isAlphanumeric().withMessage('Must Be AlphaNumeric'),
+    query('time').optional().isString(),
+    //Note: the time string is just a string comparison
+    // ideally we should be having like a movie data time stored somewhere but this should suffice
   ],
 };

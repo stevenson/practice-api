@@ -1,4 +1,6 @@
 const axios = require('axios');
+const _ = require('lodash');
+const moment = require('moment');
 
 async function retrieveBaseData() {
   const response = await axios.get('https://pastebin.com/raw/cVyp3McN');
@@ -56,11 +58,31 @@ async function retrieveBaseData() {
   }
 }
 
-async function retrieveMany() {
+async function retrieveMany(query) {
 
   const data = await retrieveBaseData();
-
-  return data;
+  console.log(query)
+  let filtered = _.filter(data, (movie) => {
+    if (!_.isEmpty(movie.showings)) {
+      let validTime = true;
+      let validGenre = true;
+      if (!_.isNil(query.time)) {
+        const date = moment().format('YYYY-MM-DD');
+        let filterTime = moment(date.toString() + ' ' + query.time + '+11:00');
+        for (showing of movie.showings) {
+          let showingDateTime = moment(date.toString() + ' ' + showing);
+          validTime = filterTime.isBefore(showingDateTime);
+          if (validTime && validGenre) {
+            return movie;
+          }
+        }
+      }
+      if (validTime && validGenre) {
+        return movie;
+      }
+    }
+  })
+  return filtered;
 }
 
 

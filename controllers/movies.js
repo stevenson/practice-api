@@ -1,4 +1,5 @@
 const HttpStatusCodes = require('http-status-codes');
+const _ = require('lodash');
 const { checkForValidationErrors } = require('helpers/check-validation');
 const { Response } = require('helpers/response-handler')
 const repo = require('repositories/movies');
@@ -11,7 +12,7 @@ async function retrieveMany(req) {
     offset: query.offset || 0,
     sort: query.sort || { field: 'score', order: 'DESC' },
   };
-  console.log('test');
+  const filter = _.pick(query, ['genre', 'time']);
   const data = await repo.retrieveMany(query, pagination);
   return new Response(data, HttpStatusCodes.OK, { pagination })
 }
