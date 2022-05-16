@@ -10,6 +10,10 @@ sample api in express that should return some simple movie recommendation. just 
     - `curl --location --request GET 'http://127.0.0.1:5000'`
   2. retrieve entries using filters like `genre` and `time`
     - `curl --location --request GET 'http://127.0.0.1:5000?time=18:00:00&genre=Drama'`
+    - assumption: 
+      - the time param in the filter is assumed to be in GMT +11:00 
+      - it might be helpful if we control that in the front end but some sanitation and cleaning might help
+      - the idea is just to return movies based on those that are showing after the time you entered
 
 ## II. Notes: 
 - the service does not have an writeable persistence layer. 
