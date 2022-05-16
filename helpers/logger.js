@@ -48,7 +48,6 @@ const originalExports = {
 // Forward to logger if not in originalExports
 module.exports = new Proxy(originalExports, {
   get(target, name) {
-    console.log(target);
     return target[name] || (logger[name] ? logger[name].bind(logger) : logger[name]);
   }
 })

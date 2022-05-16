@@ -9,10 +9,10 @@ const config = require('config');
 const routes = require('routes');
 
 // utilize a centralized error logger and error handler
-const { handleError } = require('helpers/response-handler');
-const { logger } = require('helpers/logger');
+const responseHandler = require('helpers/response-handler');
+const logger = require('helpers/logger');
 logger.configure({ appName: config.APP.NAME, level: config.LOG.LEVEL, json: config.LOG.JSON });
-errorHandler.configure({ customLogger: logger });
+responseHandler.configure({ customLogger: logger });
 
 // add everything to the app
 const app = express();
@@ -30,7 +30,7 @@ app.get('/ping', (req, res) => res.send({
 }));
 
 routes.setup(app);
-app.use(handleError);
+app.use(responseHandler.handleError);
 
 if (process.env.NODE_ENV !== 'test') {
   const port = _.get(process, 'env.PORT', config.APP.PORT);

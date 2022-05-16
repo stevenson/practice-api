@@ -27,6 +27,7 @@ function configure(config) {
 
 function handleError(error, req, res, next) {
     logger.debug('Controller Error', error);
+    console.log(error);
 
     if (error instanceof ErrorResponse) {
         if (error.logMessage) {
