@@ -8,8 +8,8 @@ sample api in express that should return some simple movie recommendation. just 
 - you should be able to run a simple curl to retrieve information from the service
   1. retrieve multiple entries:
     - `curl --location --request GET 'http://127.0.0.1:5000'`
-  2. retrieve entries using filters like `name`
-    - `curl --location --request GET 'http://127.0.0.1:5000?name=moonlight'`
+  2. retrieve entries using filters like `genre` and `time`
+    - `curl --location --request GET 'http://127.0.0.1:5000?time=18:00:00&genre=Drama'`
 
 ## II. Notes: 
 - the service does not have an writeable persistence layer. 

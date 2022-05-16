@@ -1,4 +1,4 @@
-const HttpStatusCodes = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 const _ = require('lodash');
 const { checkForValidationErrors } = require('helpers/check-validation');
 const { Response } = require('helpers/response-handler')
@@ -12,9 +12,11 @@ async function retrieveMany(req) {
     offset: query.offset || 0,
     sort: query.sort || { field: 'score', order: 'DESC' },
   };
+  console.log(query);
   const filter = _.pick(query, ['genre', 'time']);
   const data = await repo.retrieveMany(query, pagination);
-  return new Response(data, HttpStatusCodes.OK, { pagination })
+  // TODO: implement pagination
+  return new Response(data, StatusCodes.OK, { pagination })
 }
 
 module.exports = {

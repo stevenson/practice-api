@@ -28,6 +28,7 @@ module.exports = {
     query('offset').optional().isInt({ min: 0 }).withMessage('Beyond allowed range')
       .toInt(),
     query('sort').optional().customSanitizer(splitSortString).custom(checkIfSortValid),
+    // TODO: add sanitizer functions to genre and time
     query('genre').optional().isAlphanumeric().withMessage('Must Be AlphaNumeric'),
     query('time').optional().isString(),
     //Note: the time string is just a string comparison

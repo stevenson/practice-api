@@ -58,33 +58,69 @@ async function retrieveBaseData() {
   }
 }
 
-async function retrieveMany(query) {
-
-  const data = await retrieveBaseData();
-  console.log(query)
-  let filtered = _.filter(data, (movie) => {
-    if (!_.isEmpty(movie.showings)) {
-      let validTime = true;
-      let validGenre = true;
-      if (!_.isNil(query.time)) {
-        const date = moment().format('YYYY-MM-DD');
-        let filterTime = moment(date.toString() + ' ' + query.time + '+11:00');
-        for (showing of movie.showings) {
-          let showingDateTime = moment(date.toString() + ' ' + showing);
-          validTime = filterTime.isBefore(showingDateTime);
-          if (validTime && validGenre) {
-            return movie;
-          }
+// normally this should be done using the storage solution 
+// but we can do it manually?
+async function filterAndSort(movies, filter) {
+  if (filter.genre) {
+    movies = _.filter(movies, (m) => {
+      console.log('- a movie: ', filter.genre, m.genres);
+      for (genre of m.genres) {
+        if (genre === filter.genre) {
+          return true;
         }
       }
-      if (validTime && validGenre) {
-        return movie;
+      return false;
+    });
+  }
+  if (filter.time) {
+    const date = moment().format('YYYY-MM-DD');
+    const filterTime = moment(date.toString() + ' ' + filter.time + '+11:00').add(30, 'minutes');
+    console.log(filterTime);
+    movies = _.filter(movies, (m) => {
+      for (showing of m.showings) {
+        let showTime = moment(date.toString() + ' ' + showing);
+        console.log('- movie ', m.name, showing, filter.time);
+        console.log('--- show time', showTime);
+        console.log('--- filter time: ', filterTime);
+        let duration = moment.duration(showTime.diff(filterTime));
+        console.log('--- duration: ', duration.asMinutes());
+        if (duration.asMinutes() >= 0) {
+          return true;
+        }
       }
-    }
-  })
-  return filtered;
+      return false;
+    });
+  }
+  return movies;
 }
 
+async function retrieveMany(filter) {
+  // TODO: add tests to the filter function
+  const movies = await retrieveBaseData();
+  console.log('filter: ', filter);
+  const filterData = await filterAndSort(movies, filter);
+
+  return filterData;
+}
+
+// if (!_.isEmpty(m.showings)) {
+
+//   if (!_.isNil(filter.time)) {
+//     const date = moment().format('YYYY-MM-DD');
+//     let filterTime = moment(date.toString() + ' ' + filter.time + '+11:00');
+//     for (showing of m.showings) {
+//       let showingDateTime = moment(date.toString() + ' ' + showing);
+//       validTime = filterTime.isBefore(showingDateTime);
+//       if (validTime && validGenre) {
+//         return m;
+//       }
+//     }
+//   }
+//   if (validTime && validGenre) {
+//     return m;
+//   }
+// }
+// })
 
 module.exports = {
   retrieveMany,
