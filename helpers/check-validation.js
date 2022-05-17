@@ -6,11 +6,11 @@ const { ErrorResponse } = require('./response-handler');
 //       this is ran before almost all controllers.
 
 /*
- * Checks for validation errors thrown by express-validator and throws a formatted error response
- *
- * @param {Request} req
- * @throws {ErrorResponse} Throws a validation error response if there are validation errors
- */
+* Checks for validation errors thrown by express-validator and throws a formatted error response
+*
+* @param {Request} req
+* @throws {ErrorResponse} Throws a validation error response if there are validation errors
+*/
 function checkForValidationErrors(req) {
     const errors = validator.validationResult(req);
     if (!errors.isEmpty()) {

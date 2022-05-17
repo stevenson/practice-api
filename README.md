@@ -4,6 +4,11 @@ sample api in express that should return some simple movie recommendation. just 
 ## I. Setup
 1. install the dependencies: `npm ci`
 2. run the service: `npm run monitor`
+### maintenance
+1. I added a linter to keep the feel of the code the same
+    - you can run the linter via `npm run lint`
+    - there are some for loops that need cleaning
+
 ### sample calls
 - you should be able to run a simple curl to retrieve information from the service
   1. retrieve multiple entries:
@@ -12,6 +17,7 @@ sample api in express that should return some simple movie recommendation. just 
     - examples
       - `curl --location --request GET 'http://127.0.0.1:5000?time=18:00:00&genre=Drama'`
       - `curl --location --request GET 'http://127.0.0.1:5000?time=07:00:00&genre=Action%20&%20Adventure'`
+      - `http://127.0.0.1:5000?genre=animation`
     - assumption: 
       - the time param in the filter is assumed to be in GMT +11:00 
       - it might be helpful if we control that in the front end but some sanitation and cleaning might help
@@ -30,5 +36,9 @@ sample api in express that should return some simple movie recommendation. just 
 
 
 ## III. Todo's
-1. add some other routes to simulate other services or perhaps use a separate branch
+1. refactor code to agree with linting
+2. add tests for utility functions; maybe use mocha sinon.
+  - probably add a unit test to use the long function in the db
+  - add in integration test for the single retrieval call
+3. add some other routes to simulate other services or perhaps use a separate branch
 
