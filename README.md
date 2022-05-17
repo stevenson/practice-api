@@ -4,12 +4,15 @@ sample api in express that should return some simple movie recommendation. just 
 ## I. Setup
 1. install the dependencies: `npm ci`
 2. run the service: `npm run monitor`
-### maintenance
+
+## II. Development and Maintenance
 1. I added a linter to keep the feel of the code the same
     - you can run the linter via `npm run lint`
     - there are some for loops that need cleaning
+2. there are unit tests for the controller and integration test for the api as a whole
+    - you can run them via `npm test`
 
-### sample calls
+## III. sample calls
 - you should be able to run a simple curl to retrieve information from the service
   1. retrieve multiple entries:
     - `curl --location --request GET 'http://127.0.0.1:5000'`
@@ -25,7 +28,8 @@ sample api in express that should return some simple movie recommendation. just 
       - it is assume that certain special characters would be encoded
     - validation
       - time is checked if it can be converted properly into a moment object
-## II. Notes: 
+
+## IV. Notes: 
 - the service does not have an writeable persistence layer. 
   - the repo basically just retrieves from pastebin or uses a flat json for data
   - the repositories should contain actual implementation to manage data persistence
@@ -33,12 +37,9 @@ sample api in express that should return some simple movie recommendation. just 
 - the service uses port 5000 but you can change the configuration in `config/index.js`
 - the utility files/classes are in the helpers directory. these are helpful for just managing logging and responses in general.
 
-
-
-## III. Todo's
+## V. Todo's
 1. refactor code to agree with linting
-2. add tests for utility functions; maybe use mocha sinon.
-  - probably add a unit test to use the long function in the db
+2. add more negative tests
   - add in integration test for the single retrieval call
 3. add some other routes to simulate other services or perhaps use a separate branch
 
