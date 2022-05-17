@@ -65,7 +65,7 @@ async function filterAndSort(movies, filter) {
     movies = _.filter(movies, (m) => {
       console.log('- a movie: ', filter.genre, m.genres);
       for (genre of m.genres) {
-        if (genre === filter.genre) {
+        if (genre.toLowerCase() === filter.genre.toLowerCase()) {
           return true;
         }
       }
