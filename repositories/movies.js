@@ -1,6 +1,7 @@
 const axios = require('axios');
 const _ = require('lodash');
 const moment = require('moment');
+const logger = require('helpers/logger');
 
 async function retrieveBaseData() {
   const response = await axios.get('https://pastebin.com/raw/cVyp3McN');
@@ -59,11 +60,13 @@ async function retrieveBaseData() {
 }
 
 // normally this should be done using the storage solution 
-// but we can do it manually?
 async function filterAndSort(movies, filter) {
+  //NOTE: doing a single loop might make it faster but less readable
+  //- just leaving it in this way since its not a real persistence storage
+  //- prioritizing readability
   if (filter.genre) {
     movies = _.filter(movies, (m) => {
-      console.log('- a movie: ', filter.genre, m.genres);
+      logger.debug('- a movie: ', filter.genre, m.genres);
       for (genre of m.genres) {
         if (genre.toLowerCase() === filter.genre.toLowerCase()) {
           return true;
@@ -75,15 +78,15 @@ async function filterAndSort(movies, filter) {
   if (filter.time) {
     const date = moment().format('YYYY-MM-DD');
     const filterTime = moment(date.toString() + ' ' + filter.time + '+11:00').add(30, 'minutes');
-    console.log(filterTime);
+    logger.debug(filterTime);
     movies = _.filter(movies, (m) => {
       for (showing of m.showings) {
         let showTime = moment(date.toString() + ' ' + showing);
-        console.log('- movie ', m.name, showing, filter.time);
-        console.log('--- show time', showTime);
-        console.log('--- filter time: ', filterTime);
+        logger.debug('- movie ', m.name, showing, filter.time);
+        logger.debug('--- show time', showTime);
+        logger.debug('--- filter time: ', filterTime);
         let duration = moment.duration(showTime.diff(filterTime));
-        console.log('--- duration: ', duration.asMinutes());
+        logger.debug('--- duration: ', duration.asMinutes());
         if (duration.asMinutes() >= 0) {
           return true;
         }
@@ -102,25 +105,6 @@ async function retrieveMany(filter) {
 
   return filterData;
 }
-
-// if (!_.isEmpty(m.showings)) {
-
-//   if (!_.isNil(filter.time)) {
-//     const date = moment().format('YYYY-MM-DD');
-//     let filterTime = moment(date.toString() + ' ' + filter.time + '+11:00');
-//     for (showing of m.showings) {
-//       let showingDateTime = moment(date.toString() + ' ' + showing);
-//       validTime = filterTime.isBefore(showingDateTime);
-//       if (validTime && validGenre) {
-//         return m;
-//       }
-//     }
-//   }
-//   if (validTime && validGenre) {
-//     return m;
-//   }
-// }
-// })
 
 module.exports = {
   retrieveMany,
